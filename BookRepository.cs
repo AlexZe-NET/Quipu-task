@@ -1,4 +1,5 @@
-﻿using Quipu_task.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Quipu_task.Models;
 
 namespace Quipu_task
 {
@@ -9,6 +10,9 @@ namespace Quipu_task
     {
         Task<int> AddAsync(Book book);
         Task<Book> GetByIdAsync(int id);
+        Task<List<Book>> GetAllAsync();
+        Task UpdateAsync(Book book);
+        Task DeleteAsync(Book book);
     }
 
     // EF Core implementation of Book repository
@@ -31,6 +35,23 @@ namespace Quipu_task
         public async Task<Book> GetByIdAsync(int id)
         {
             return await _context.Books.FindAsync(id);
+        }
+
+        public async Task<List<Book>> GetAllAsync()
+        {
+            return await _context.Books.ToListAsync();
+        }
+
+        public async Task UpdateAsync(Book book)
+        {
+            _context.Entry(book).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(Book book)
+        {
+            _context.Books.Remove(book);
+            await _context.SaveChangesAsync();
         }
     }
 }
