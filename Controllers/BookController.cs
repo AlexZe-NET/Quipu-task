@@ -18,8 +18,15 @@ public class BookController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateBook([FromBody] CreateBookCommand command)
     {
-        var bookId = await _mediator.Send(command);
-        return CreatedAtAction(nameof(GetBook), new { id = bookId }, bookId);
+        try
+        {
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpGet("{id}")]
