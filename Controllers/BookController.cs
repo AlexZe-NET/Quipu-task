@@ -35,7 +35,7 @@ public class BookController : ControllerBase
         var query = new GetBookByIdQuery { BookId = id };
         var book = await _mediator.Send(query);
         if (book == null)
-            return NotFound();
+            return NotFound($"Book with id {id} does not exist.");
         return Ok(book);
     }
 
@@ -48,11 +48,8 @@ public class BookController : ControllerBase
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateBook(int id, [FromBody] UpdateBookCommand command)
+    public async Task<IActionResult> UpdateBook([FromBody] UpdateBookCommand command)
     {
-        if (id != command.BookId)
-            return BadRequest();
-
         await _mediator.Send(command);
         return NoContent();
     }

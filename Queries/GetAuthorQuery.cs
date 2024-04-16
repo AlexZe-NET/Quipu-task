@@ -22,4 +22,5 @@ namespace Quipu_task.Queries
             return await _authorRepository.GetByIdAsync(request.AuthorId);
         }
     }
+
 }
